@@ -41,6 +41,7 @@ def extract_sequence(doc):
                 span.append(location.nbor())
                 location_nbor = location_nbor.nbor()
                 span.merge()
+            print(doc)
             for parent in location.ancestors:
                 if parent.pos_ == 'VERB':
                     s = ""
@@ -50,6 +51,68 @@ def extract_sequence(doc):
                     relations.append((location, s))
                     break
     return relations
+
+    #merged method returning children of first parent verb
+    '''spans = list(doc.ents) + list(doc.noun_chunks)
+    for span in spans:
+        span.merge()
+    for location in filter(lambda w: w.ent_type_ == 'GPE', doc):
+        for parent in location.ancestors:
+            if parent.pos_ == 'VERB':
+                s = ""
+                for t in parent.subtree:
+                    s += t.text
+                    s += " "
+                relations.append((location, s))
+                break
+    return relations'''
+
+    #merged method returning children of first parent
+    '''spans = list(doc.ents) + list(doc.noun_chunks)
+    for span in spans:
+        span.merge()
+    for location in filter(lambda w: w.ent_type_ == 'GPE', doc):
+        for t in location.parent.subtree:
+            s += t.text
+            s += " "
+            relations.append((location, s))
+    return relations'''
+
+    #return children of first parent
+    '''for location in filter(lambda w: w.ent_iob_ == 'B', doc):
+        if location.ent_type_ == 'GPE':
+            span = [location]
+            index = location.i
+            location_nbor = location.nbor()
+            while location_nbor.ent_iob_ == 'I':
+                span.append(location.nbor())
+                location_nbor = location_nbor.nbor()
+                span.merge()
+            print(doc)
+            for t in location.parent.subtree:
+                s += t.text
+                s += " "
+            relations.append((location, s))
+    return relations'''
+
+    #return children of second parent
+    '''for location in filter(lambda w: w.ent_iob_ == 'B', doc):
+        if location.ent_type_ == 'GPE':
+            span = [location]
+            index = location.i
+            location_nbor = location.nbor()
+            while location_nbor.ent_iob_ == 'I':
+                span.append(location.nbor())
+                location_nbor = location_nbor.nbor()
+                span.merge()
+            print(doc)
+            for t in location.parent.parent.subtree:
+                s += t.text
+                s += " "
+            relations.append((location, s))
+    return relations'''
+
+    #unused methods
     '''for location in filter(lambda w: w.ent_type_ == 'GPE' , doc):
         print(location)
         print('.')
@@ -70,6 +133,7 @@ def extract_sequence(doc):
                     relations.append(word)
             relations.append(location)
         return relations'''
+
     '''for location in filter(lambda w: w.ent_type_ == 'GPE', doc):
         if location.dep_ in ('nsubj'):
             subject = [w for w in location.head.children if w.dep_ == 'dobj']
